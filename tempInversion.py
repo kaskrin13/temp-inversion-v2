@@ -99,6 +99,12 @@ def getData(url):
     #Convert windspeed text to float
     for i in range(1, len(data), 1):
         data[i][3] = float(data[i][3])
+
+    #Rename first row to labels
+    data[0][2] = 'Air Temp'
+    data[0][3] = 'Wind Speed'
+    data[0][4] = 'Lux'
+    data[0][5] = 'Batt Volt'
         
     return data
 
