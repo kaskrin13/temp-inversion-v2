@@ -173,8 +173,6 @@ def printResult(result):
 def generateHTMLTable(results):
     #HTML table beginning tag and title row 
     html = """<table cellspacing="0" cellpadding="10" id="MainContent_GridView1" align="center" style="color:#333333;border-collapse:collapse;overflow-x:auto;">
-                        <caption>
-                        </caption>
                         <tbody>
                             <tr style="color:White;background-color:#5B9BD5;font-weight:bold;">
                                 <th scope="col">Station</th>

@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head></head>
+	<body>
+		<div id="header" style="width:100%;background-color:white;height:30px;"></div>
+		<div class="aspNetHidden">
+			<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="79E6444B">
+		</div>
+		<div class="page">
+			<div class="header">
+				<div class="title">
+					<h1 align="center">
+						Daily Temperature Inversion Determination for Aerial Applicators in Mississippi Delta
+					</h1>
+				</div>
+				<div class="clear hideSkiplink">
+				</div>
+			</div>
+			<div class="main">
+				This page shows the weather data observed and measured every 15 minutes at a local weather station. 
+				Green marks indicate a low potential for temperature inversion in these locations and aerial application is recommended at the time with green mark. 
+				Otherwise, the temperatures are marked in red, which indicates that the potential for temperature inversion is high and aerial application is not recommended in those locations at the time with red mark. 
+				<p>For the latest observations and recommendation, please refresh your browser.</p>
+				
+				<!-- Updating clock code -->
+				<script type="text/javascript">
+					tday=new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
+					tmonth=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+					
+					function GetClock(){
+						var d=new Date();
+						var nday=d.getDay(),nmonth=d.getMonth(),ndate=d.getDate(),nyear=d.getYear();
+						if(nyear<1000) nyear+=1900;
+						var nhour=d.getHours(),nmin=d.getMinutes(),nsec=d.getSeconds(),ap;
+						
+						if(nhour==0){ap=" AM";nhour=12;}
+						else if(nhour<12){ap=" AM";}
+						else if(nhour==12){ap=" PM";}
+						else if(nhour>12){ap=" PM";nhour-=12;}
+						
+						if(nmin<=9) nmin="0"+nmin;
+						if(nsec<=9) nsec="0"+nsec;
+						
+						document.getElementById('clockbox').innerHTML=""+tday[nday]+", "+tmonth[nmonth]+" "+ndate+", "+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
+					}
+					
+					window.onload=function(){
+						GetClock();
+						setInterval(GetClock,1000);
+					}
+				</script>
+				<div id="clockbox">Thursday, May 18, 2017 10:29:59 AM</div>
+				
+				<!-- Table code --> 
+				<div>                    
+					<table cellspacing="0" cellpadding="10" id="MainContent_GridView1" align="center" style="color:#333333;border-collapse:collapse;overflow-x:auto;">
+                        <tbody>
+                            <tr style="color:White;background-color:#5B9BD5;font-weight:bold;">
+                                <th scope="col">Station</th>
+                                <th scope="col" style="width:45px;">Current Temp  (&#176;F)</th>
+                                <th scope="col" style="width:85px;">Current Time</th>
+                                <th scope="col" style="width:50px;">Wind Speed (MPH)</th>
+                                <th scope="col" style="width:45px;">Low Temp  (&#176;F)</th>
+                                <th scope="col" style="width:85px;">Time Of Low</th>
+                                <th scope="col" style="width:45px;">High Temp  (&#176;F)</th>
+                                <th scope="col" style="width:85px;">Time Of High</th>
+                            </tr>
+                            <tr style="color:#333333;background-color:#D2DEEF;">
+                                <td>Station 1</td>
+                                <td align="center" style="background-color:LightGreen;">69.3</td>
+                                <td align="center">12:30:16</td>
+                                <td align="center">1.0</td>
+                                <td align="center">59.1</td>
+                                <td align="center">05:41:18</td>
+                                <td align="center">72.2</td>
+                                <td align="center">09:06:38</td>
+                            </tr>
+                    </table>
+				</div>
+				<p></p>
+				<p style="margin:0;text-align: center;">This is a research prototype. This is NOT for information consultation.</p>
+				<p></p>
+			</div>
+			<div class="clear">
+			</div>
+		</div>
+				
+		<!-- Example code for maps here: https://www.taniarascia.com/google-maps-apis-for-multiple-locations/ -->
+		<!-- Map Code -->
+		<div id="map"></div>
+		<script async defer 
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK4nlrHFpSQdWQ19NNPDw4_iA-e2d7KNg&callback=initMap"></script>
+		
+		<!-- Map CSS -->
+		<style type="text/css">
+			html,
+			body,
+			#map {
+				width: 80%;
+				height: 80%;
+				margin-left: auto;
+				margin-right: auto;
+			}
+		</style>
+		
+		<script type="text/javascript">
+			function initMap() {
+				<!-- For new stations add a new var here -->
+				var station1 = {
+					info: '<strong>Station 1</strong>\
+								<br> Stoneville, MS 38776<br>',
+					lat: 33.447560,
+					long: -90.876221
+				};
+				
+				<!-- Test Code for a second location -->
+				<!--var building1 = {-->
+				<!--	info: '<strong>ARS Building 1</strong>\-->
+				<!--				<br> Stoneville, MS 38776<br>',-->
+				<!--	lat: 33.425078,-->
+				<!--	long: -90.910829-->
+				<!--};-->
+				
+				<!-- and here -->
+				var locations = [
+					[station1.info, station1.lat, station1.long, 0]
+					<!-- Test Code for a second location -->
+					<!--,[building1.info, building1.lat, building1.long, 1]-->
+			    ];
+			
+				var map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 14,
+					center: new google.maps.LatLng(33.44, -90.88),
+					mapTypeId: google.maps.MapTypeId.HYBRID
+				});
+			
+				var infowindow = new google.maps.InfoWindow({});
+			
+				var marker, i;
+			
+				for (i = 0; i < locations.length; i++) {
+					marker = new google.maps.Marker({
+						position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+						map: map
+					});
+			
+					google.maps.event.addListener(marker, 'click', (function (marker, i) {
+						return function () {
+							infowindow.setContent(locations[i][0]);
+							infowindow.open(map, marker);
+						}
+					})(marker, i));
+					
+					<!-- This displays the infowindow for the last item in locations -->
+					infowindow.setContent(locations[i][0]);
+					infowindow.open(map, marker);
+				}
+			}
+		</script>
+	</body>
+</html>
