@@ -52,30 +52,36 @@
 				<div id="clockbox">Thursday, May 18, 2017 10:29:59 AM</div>
 				
 				<!-- Table code --> 
-				<div>                    
+				<div>
 					<table cellspacing="0" cellpadding="10" id="MainContent_GridView1" align="center" style="color:#333333;border-collapse:collapse;overflow-x:auto;">
-                        <tbody>
-                            <tr style="color:White;background-color:#5B9BD5;font-weight:bold;">
-                                <th scope="col">Station</th>
-                                <th scope="col" style="width:45px;">Current Temp  (&#176;F)</th>
-                                <th scope="col" style="width:85px;">Current Time</th>
-                                <th scope="col" style="width:50px;">Wind Speed (MPH)</th>
-                                <th scope="col" style="width:45px;">Low Temp  (&#176;F)</th>
-                                <th scope="col" style="width:85px;">Time Of Low</th>
-                                <th scope="col" style="width:45px;">High Temp  (&#176;F)</th>
-                                <th scope="col" style="width:85px;">Time Of High</th>
-                            </tr>
-                            <tr style="color:#333333;background-color:#D2DEEF;">
-                                <td>Station 1</td>
-                                <td align="center" style="background-color:LightGreen;">69.3</td>
-                                <td align="center">12:30:16</td>
-                                <td align="center">1.0</td>
-                                <td align="center">59.1</td>
-                                <td align="center">05:41:18</td>
-                                <td align="center">72.2</td>
-                                <td align="center">09:06:38</td>
-                            </tr>
-                    </table>
+						<tbody>
+							<tr style="color:White;background-color:#5B9BD5;font-weight:bold;">
+								<th scope="col">Station</th>
+								<th scope="col" style="width:80px;">Current Temp  (&#176;F)</th>
+								<th scope="col" style="width:100px;">Current Time</th>
+								<th scope="col" style="width:60px;">Wind Speed (MPH)</th>
+								<th scope="col" style="width:60px;">Low Temp  (&#176;F)</th>
+								<th scope="col" style="width:100px;">Time Of Low</th>
+								<th scope="col" style="width:60px;">High Temp  (&#176;F)</th>
+								<th scope="col" style="width:100px;">Time Of High</th>
+							</tr>
+							{% for result in results %}
+							<tr style="color:#333333;background-color:#D2DEEF;">
+								<td>Station {{ loop.index }}</td>
+								{% if result[0] == True %}
+									<td align="center" style="background-color:Crimson;">{{ result[1] }}</td>
+								{% else %}
+									<td align="center" style="background-color:LightGreen;">{{ result[1] }}</td>
+								{% endif %}
+								<td align="center">{{ result[2] }}</td>
+								<td align="center">{{ result[3] }}</td>
+								<td align="center">{{ result[4] }}</td>
+								<td align="center">{{ result[5] }}</td>
+								<td align="center">{{ result[6] }}</td>
+								<td align="center">{{ result[7] }}</td>
+							</tr>
+							{% endfor %}
+					</table>
 				</div>
 				<p></p>
 				<p style="margin:0;text-align: center;">This is a research prototype. This is NOT for information consultation.</p>
@@ -88,8 +94,7 @@
 		<!-- Example code for maps here: https://www.taniarascia.com/google-maps-apis-for-multiple-locations/ -->
 		<!-- Map Code -->
 		<div id="map"></div>
-		<script async defer 
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK4nlrHFpSQdWQ19NNPDw4_iA-e2d7KNg&callback=initMap"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK4nlrHFpSQdWQ19NNPDw4_iA-e2d7KNg&callback=initMap"></script>
 		
 		<!-- Map CSS -->
 		<style type="text/css">
