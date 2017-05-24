@@ -1,5 +1,5 @@
 # David Fisher
-# 5/19/2017
+# 5/24/2017
 
 import urllib.request
 import codecs
@@ -163,7 +163,7 @@ def printData(data):
 	table = [fmt.format(*row) for row in s]
 	print ('\n'.join(table))
 
-# prints a list of results for error checking
+# prints a list of results for error checking with a label
 # input: results = 2d list
 def printResults(results):
 	print("| {0:^10} | {1:^20} | {2:^20} | {3:^21} | {4:^15} | {5:^20} | {6:^15} | {7:^20} |".format("Inversion", "Most Recent Temp", "Most Recent Time", "Most Recent Windspeed", "Low Temp", "Time of Low", "High Temp", "Time of High"))
@@ -179,71 +179,6 @@ def printResult(result):
 	else:
 		print("| {0:^10} | {1:^20} | {2:^20} | {3:^21} | {4:^15} | {5:^20} | {6:^15} | {7:^20} |".format("No", result[1], result[2], result[3], result[4], result[5], result[6], result[7]))
 
-# takes a list of results (8-tuple) and generates an HTML table
-# the spaces at the beginning and the \n at the end of each line
-# preserves the HTML formatting for writing to a file
-# input: results = list
-# output: html = string
-def generateHTMLTable(results):
-	#HTML table beginning tag and title row 
-	html = """<table cellspacing="0" cellpadding="10" id="MainContent_GridView1" align="center" style="color:#333333;border-collapse:collapse;overflow-x:auto;">
-						<tbody>
-							<tr style="color:White;background-color:#5B9BD5;font-weight:bold;">
-								<th scope="col">Station</th>
-								<th scope="col" style="width:45px;">Current Temp  (&#176;F)</th>
-								<th scope="col" style="width:85px;">Current Time</th>
-								<th scope="col" style="width:50px;">Wind Speed (MPH)</th>
-								<th scope="col" style="width:45px;">Low Temp  (&#176;F)</th>
-								<th scope="col" style="width:85px;">Time Of Low</th>
-								<th scope="col" style="width:45px;">High Temp  (&#176;F)</th>
-								<th scope="col" style="width:85px;">Time Of High</th>
-							</tr>\n"""
-	
-	for i in range(0, len(results), 1):
-		#New row tag in table
-		html += """							<tr style="color:#333333;background-color:#D2DEEF;">\n"""
-		#First column in new row
-		html += "								<td>{}</td>\n".format("Station "+str(i+1))
-		#Determine color of second column based on whether or not there is an inversion
-		if results[i][0]:
-			html += """								<td align="center" style="background-color:Crimson;">{}</td>\n""".format(results[i][1])
-		else:
-			html += """								<td align="center" style="background-color:LightGreen;">{}</td>\n""".format(results[i][1])
-		#Rest of columns
-		for j in range(2, len(results[0]), 1):
-			if isinstance(results[i][j], datetime.datetime):
-				#Only print HH:MM:SS of datetime
-				html += """								<td align="center">{}</td>\n""".format(str(results[i][j])[11:])
-			else:
-				html += """								<td align="center">{}</td>\n""".format(str(results[i][j]))
-		#End of row tag in table
-		html += "							</tr>\n"
-	#End of table tag
-	html += "					</table>"
-
-	return html
-
-# takes a new HTML table in the form of a string
-# and an HTML file and overwrites the old table with the new one
-# input: newHTML = string, fileName = string
-def replaceHTML(newHTML, fileName):
-	#Open file in read mode
-	file = open(fileName, "r")
-	htmlText = file.read()
-
-	#Regex expression to find the table
-	regex = r"(<table.*?>)(.*?)(<\/table>)"
-	match = re.search(regex, htmlText, flags=re.DOTALL)
-
-	#Replace old table with new table
-	htmlText = htmlText.replace(htmlText[match.start():match.end()], newHTML)
-
-	#Reopen file in write mode and write to file
-	file.close()
-	file = open(fileName, "w")
-	file.write(htmlText)
-	file.close()
-
 # uses a hardcoded list of urls to get data from CSVs
 # uses the data in the CSVs to generate a set of recommendations
 # based on whether or not there is an inversion
@@ -251,7 +186,7 @@ def replaceHTML(newHTML, fileName):
 # output: results = 2d list
 def main():
 	#List of URLs with data, each URL represents one station
-	urls = ["https://thingspeak.com/channels/211013/feed.csv"]
+	urls = ["https://thingspeak.com/channels/211013/feed.csv", "https://thingspeak.com/channels/211013/feed.csv"]
 	results = []
 	
 	#Calculate results based on number of URLs
@@ -260,17 +195,7 @@ def main():
 		results.append(tempInv(data))
 
 	#Print results for debugging
-	
-	printResults(results)
-	
-
-	#Directly edits html page, won't work for heroku/github
-	'''
-	#Generate new table
-	html = generateHTMLTable(results)
-	#Write to file
-	replaceHTML(html, "index.html")
-	'''
+	#printResults(results)
 
 	#return 2d list with info for webpage
 	return results
