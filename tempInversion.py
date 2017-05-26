@@ -5,7 +5,7 @@ import urllib.request
 import codecs
 import csv
 import datetime, time
-import re
+import pytz
 
 # gets lowest temperature of the day by
 # searching entries in table (2d list) between the beginning
@@ -55,9 +55,18 @@ def getHighTemp(currentTime, data):
 # input: utc = datetime
 # output: utc+offset = datetime
 def utcToLocal(utc):
-	epoch = time.mktime(utc.timetuple())
-	offset = datetime.datetime.fromtimestamp(epoch) - datetime.datetime.utcfromtimestamp(epoch)
-	return utc + offset
+        timezone = 'America/Chicago'
+        tz = pytz.timezone('America/Chicago')
+        if (daylightSavings(timezone)):
+                return pytz.utc.localize(utc, is_dst=True).astimezone(tz)
+        else:
+                return pytz.utc.localize(utc, is_dst=False).astimezone(tz)
+        
+# determines if daylight savings time is in effect
+def daylightSavings(zonename):
+    tz = pytz.timezone(zonename)
+    now = pytz.utc.localize(datetime.datetime.utcnow())
+    return now.astimezone(tz).dst() != datetime.timedelta(0)
 
 # get data from CSV file at URL and insert into table (2d list)
 # then processes the data added to table (covert text to necessary formats)
@@ -126,33 +135,33 @@ def tempInv(data):
 	if currentTime.time() < datetime.time(12):  	
 		if currentTemp - lowTemp[0] > 3:
 			# no inversion and spray OK
-			return (False, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+			return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 		else:
 			if (currentTemp - lowTemp[0]) < 2:
 				# strong inversion and no spray suggested
-				return (True, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+				return (True, currentTemp, str(currentTime)[11:1919], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 			else:
 				if (currentTemp - lowTemp[0]) < 2 and currentWindSpeed > 4:
 					# no inversion and spray OK
-					return (False, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+					return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 				else:
 					# strong inversion and no spray suggested
-					return (True, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+					return (True, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 	else:
 		if abs(currentTemp - highTemp[0]) <= 5:
 			# no inversion and spray OK
-			return (False, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+			return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 		else:
 			if (currentTemp - highTemp[0]) >= 7:
 				# strong inversion and no spray suggested
-				return (True, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+				return (True, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 			else:
 				if (currentTemp - highTemp[0]) >= 7 and currentWindSpeed > 4:
 					# no inversion and spray OK
-					return (False, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+					return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 				else:
 					# strong inversion and no spray suggested
-					return (True, currentTemp, str(currentTime)[11:], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:], highTemp[0], str(highTemp[1])[11:])
+					return (True, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19])
 
 # prints the data in a readible format for error checking
 # input: data = 2d list
@@ -195,7 +204,7 @@ def main():
 		results.append(tempInv(data))
 
 	#Print results for debugging
-	#printResults(results)
+	printResults(results)
 
 	#return 2d list with info for webpage
 	return results

@@ -1,2 +1,2 @@
-Flask
-gunicorn
+Flask==0.12.2
+pytz==2017.2
