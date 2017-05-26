@@ -1,8 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head></head>
-	
+	<head>
+		<title> Temperature Inversion V2 </title>
+	</head>
+
 	<body>
 		<div id="header" style="width:100%;background-color:white;height:30px;"></div>
 		<div class="aspNetHidden">
@@ -24,30 +26,31 @@
 				This page shows the weather data observed and measured every 15 minutes at a local weather station. 
 				Green marks indicate a low potential for temperature inversion in these locations and aerial application is recommended at the time with green mark. 
 				Otherwise, the temperatures are marked in red, which indicates that the potential for temperature inversion is high and aerial application is not recommended in those locations at the time with red mark. 
+                <p>Click <a href="#Map">here</a> to go to the map.</p>
 				<p>For the latest observations and recommendation, please refresh your browser.</p>
 
 				<!-- Updating clock code -->
 				<script type="text/javascript">
 					tday=new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
 					tmonth=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
-					
+
 					function GetClock(){
 						var d=new Date();
 						var nday=d.getDay(),nmonth=d.getMonth(),ndate=d.getDate(),nyear=d.getYear();
 						if(nyear<1000) nyear+=1900;
 						var nhour=d.getHours(),nmin=d.getMinutes(),nsec=d.getSeconds(),ap;
-						
+
 						if(nhour==0){ap=" AM";nhour=12;}
 						else if(nhour<12){ap=" AM";}
 						else if(nhour==12){ap=" PM";}
 						else if(nhour>12){ap=" PM";nhour-=12;}
-					
+
 						if(nmin<=9) nmin="0"+nmin;
 						if(nsec<=9) nsec="0"+nsec;
-						
+
 						document.getElementById('clockbox').innerHTML=""+tday[nday]+", "+tmonth[nmonth]+" "+ndate+", "+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
 					}
-					
+
 					window.onload=function(){
 						GetClock();
 						setInterval(GetClock,1000);
@@ -71,15 +74,18 @@
 							align="center";
 							style="color:#333333;
 						}
-						
+
 						/* Row formatting */
 						td { 
 							padding: 6px; 
 							text-align: center; 
 							color:#333333;
-							background-color:#D2DEEF;"
 						}
-						
+
+						/* Alternate colors for rows */
+						td:nth-child(even) { background-color: #D2DEEF; }
+						td:nth-child(odd) { background-color: #EAEFF7; }
+
 						/* Header row formatting */
 						th { 
 							padding: 6px; 
@@ -99,8 +105,14 @@
 						table, thead, tbody, th, td, tr {
 							display: block;
 						}
-						/* Hide table headers */
-						th { display: none; }
+
+						
+						/* Hide table headers (but not display: none;, for accessibility) */
+						thead tr { 
+							position: absolute;
+							top: -9999px;
+							left: -9999px;
+						}
 
 						/* Row formatting */
 						td {
@@ -132,12 +144,12 @@
 
 						/* Label the data */
 						td:nth-of-type(1):before { content: "Station"; }
-						td:nth-of-type(2):before { content: "Current Temp  (°F)"; }
-						td:nth-of-type(3):before { content: "Current Time"; }
+						td:nth-of-type(2):before { content: "Most Recent Temp  (°F)"; }
+						td:nth-of-type(3):before { content: "Most Recent Time"; }
 						td:nth-of-type(4):before { content: "Wind Speed (MPH)"; }
-						td:nth-of-type(5):before { content: "Low Temp  (°F)"; }
+						td:nth-of-type(5):before { content: "Low Temp (°F)"; }
 						td:nth-of-type(6):before { content: "Time Of Low"; }
-						td:nth-of-type(7):before { content: "High Temp  (°F)"; }
+						td:nth-of-type(7):before { content: "High Temp (°F)"; }
 						td:nth-of-type(8):before { content: "Time Of High"; }
 					}
 				</style>
@@ -145,33 +157,37 @@
 				<!-- Table code --> 
 				<div overflow-x:auto;>
 					<table>
-						<tbody>
+						<thead>
 							<tr>
 								<th>Station</th>
-								<th>Current Temp  (&#176;F)</th>
-								<th>Current Time</th>
+								<th>Most Recent Temp  (&#176;F)</th>
+								<th>Most Recent Time</th>
 								<th>Wind Speed (MPH)</th>
 								<th>Low Temp  (&#176;F)</th>
 								<th>Time Of Low</th>
 								<th>High Temp  (&#176;F)</th>
 								<th>Time Of High</th>
 							</tr>
+						</thead>
+						<!-- Flask template for table rows -->
+						<tbody>
 							{% for result in results %}
 							<tr>
-								<td>Station {{ loop.index }}</td>
+								<td class="header" data-title="Station">Station {{ loop.index }}</td>
 								{% if result[0] == True %}
-								<td style="background-color:Crimson;">{{ result[1] }}</td>
+								<td data-title="Most Recent Temp" style="background-color:Crimson;">{{ result[1] }}</td>
 								{% else %}
-								<td style="background-color:LightGreen;">{{ result[1] }}</td>
+								<td data-title="Most Recent Temp" style="background-color:LightGreen;">{{ result[1] }}</td>
 								{% endif %}
-								<td>{{ result[2] }}</td>
-								<td>{{ result[3] }}</td>
-								<td>{{ result[4] }}</td>
-								<td>{{ result[5] }}</td>
-								<td>{{ result[6] }}</td>
-								<td>{{ result[7] }}</td>
+								<td data-title="Most Recent Time">{{ result[2] }}</td>
+								<td data-title="Wind Speed (MPH)">{{ result[3] }}</td>
+								<td data-title="Low Temp  (°F)">{{ result[4] }}</td>
+								<td data-title="Time Of Low">{{ result[5] }}</td>
+								<td data-title="High Temp (°F)">{{ result[6] }}</td>
+								<td data-title="Time Of High">{{ result[7] }}</td>
 							</tr>
 							{% endfor %}
+						</tbody>
 					</table>
 				</div>
 				<p></p>
@@ -182,10 +198,12 @@
 			</div>
 		</div>
 
-		<!-- Example code for maps here: https://www.taniarascia.com/google-maps-apis-for-multiple-locations/ -->
 		<!-- Map Code -->
+        <!-- Example code for maps here: https://www.taniarascia.com/google-maps-apis-for-multiple-locations/ -->
 		<div id="map"></div>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK4nlrHFpSQdWQ19NNPDw4_iA-e2d7KNg&callback=initMap"></script>
+
+        <a name="Map"><a/>
 
 		<!-- Map CSS -->
 		<style type="text/css">
