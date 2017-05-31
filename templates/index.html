@@ -18,15 +18,13 @@
 						Daily Temperature Inversion Determination for Aerial Applicators in Mississippi Delta
 					</h1>
 				</div>
-				<div class="clear hideSkiplink">
-				</div>
 			</div>
 
 			<div class="main">
 				This page shows the weather data observed and measured every 15 minutes at a local weather station. 
 				Green marks indicate a low potential for temperature inversion in these locations and aerial application is recommended at the time with green mark. 
 				Otherwise, the temperatures are marked in red, which indicates that the potential for temperature inversion is high and aerial application is not recommended in those locations at the time with red mark. 
-                <p>Click <a href="#Map">here</a> to go to the map.</p>
+				<p>Click <a href="#map">here</a> to go to the map.</p>
 				<p>For the latest observations and recommendation, please refresh your browser.</p>
 
 				<!-- Updating clock code -->
@@ -174,17 +172,21 @@
 							{% for result in results %}
 							<tr>
 								<td class="header" data-title="Station">Station {{ loop.index }}</td>
-								{% if result[0] == True %}
-								<td data-title="Most Recent Temp" style="background-color:Crimson;">{{ result[1] }}</td>
+								{% if result[8] == False %}
+									{% if result[0] == True %}
+										<td data-title="Most Recent Temp" style="background-color:Crimson;">{{ result[1] }}</td>
+									{% else %}
+										<td data-title="Most Recent Temp" style="background-color:LightGreen;">{{ result[1] }}</td>
+									{% endif %}
+									<td data-title="Most Recent Time">{{ result[2] }}</td>
+									<td data-title="Wind Speed (MPH)">{{ result[3] }}</td>
+									<td data-title="Low Temp  (°F)">{{ result[4] }}</td>
+									<td data-title="Time Of Low">{{ result[5] }}</td>
+									<td data-title="High Temp (°F)">{{ result[6] }}</td>
+									<td data-title="Time Of High">{{ result[7] }}</td>
 								{% else %}
-								<td data-title="Most Recent Temp" style="background-color:LightGreen;">{{ result[1] }}</td>
+									<td colspan="7">The station is temporarily not working, and will be back up shortly</td>
 								{% endif %}
-								<td data-title="Most Recent Time">{{ result[2] }}</td>
-								<td data-title="Wind Speed (MPH)">{{ result[3] }}</td>
-								<td data-title="Low Temp  (°F)">{{ result[4] }}</td>
-								<td data-title="Time Of Low">{{ result[5] }}</td>
-								<td data-title="High Temp (°F)">{{ result[6] }}</td>
-								<td data-title="Time Of High">{{ result[7] }}</td>
 							</tr>
 							{% endfor %}
 						</tbody>
@@ -194,16 +196,14 @@
 				<p style="margin:0;text-align: center;">This is a research prototype. This is NOT for information consultation.</p>
 				<p></p>
 			</div>
-			<div class="clear">
-			</div>
 		</div>
 
 		<!-- Map Code -->
-        <!-- Example code for maps here: https://www.taniarascia.com/google-maps-apis-for-multiple-locations/ -->
+		<!-- Example code for maps here: https://www.taniarascia.com/google-maps-apis-for-multiple-locations/ -->
 		<div id="map"></div>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK4nlrHFpSQdWQ19NNPDw4_iA-e2d7KNg&callback=initMap"></script>
 
-        <a name="Map"><a/>
+		<a name="map"><a/>
 
 		<!-- Map CSS -->
 		<style type="text/css">
@@ -214,6 +214,7 @@
 					height: 80%;
 					margin-left: auto;
 					margin-right: auto;
+					padding-bottom: 20px;
 				}
 		</style>
 
