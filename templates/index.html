@@ -126,12 +126,12 @@
 							/* Now like a table header */
 							position: absolute;
 							/* Top/left values mimic padding */
+							content: attr(data-title);
 							top: 0px;
 							left: 0px;
 							bottom: 0px;
 							width: 50%;
 							padding-right: 0px;
-							white-space: nowrap;
 							background-color: #5B9BD5;
 							font-weight: bold;
 							color: white;
@@ -139,16 +139,6 @@
 
 						/* Add gap between stations */
 						tr { padding-bottom: 10px; }
-
-						/* Label the data */
-						td:nth-of-type(1):before { content: "Station"; }
-						td:nth-of-type(2):before { content: "Most Recent Temp  (°F)"; }
-						td:nth-of-type(3):before { content: "Most Recent Time"; }
-						td:nth-of-type(4):before { content: "Wind Speed (MPH)"; }
-						td:nth-of-type(5):before { content: "Low Temp (°F)"; }
-						td:nth-of-type(6):before { content: "Time Of Low"; }
-						td:nth-of-type(7):before { content: "High Temp (°F)"; }
-						td:nth-of-type(8):before { content: "Time Of High"; }
 					}
 				</style>
 
