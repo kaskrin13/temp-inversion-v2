@@ -215,7 +215,7 @@ def main():
 		results.append(tempInv(data))
 
 	#Print results for debugging
-	printResults(results)
+	#printResults(results)
 
 	#return 2d list with info for webpage
 	return results
