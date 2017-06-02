@@ -10,13 +10,13 @@ import pytz
 # gets lowest temperature of the day by
 # searching entries in table (2d list) between the beginning
 # of the current day and the last entry (most recent time)
-# inputs: currentTime = datetime, data = 2d list
+# inputs: mostRecentTime = datetime, data = 2d list
 # output: lowTemp = tuple(int, datetime)
-def getLowTemp(currentTime, data):
+def getLowTemp(mostRecentTime, data):
 	currentDay = []
 	#Adds timestamps from current day to new list
 	for row in data[1:]:
-		if row[0].month == currentTime.month and row[0].day == currentTime.day:
+		if row[0].month == mostRecentTime.month and row[0].day == mostRecentTime.day:
 			currentDay.append(row)
 
 	lowTemp = currentDay[0][2]
@@ -32,13 +32,13 @@ def getLowTemp(currentTime, data):
 # gets highest temperature of the day by
 # searching entries in table (2d list) between the beginning
 # of the current day and the last entry (most recent time)
-# inputs: currentTime = datetime, data = 2d list
+# inputs: mostRecentTime = datetime, data = 2d list
 # output: highTemp = tuple(int, datetime)
-def getHighTemp(currentTime, data):
+def getHighTemp(mostRecentTime, data):
 	currentDay = []
 	#Adds timestamps from current day to new list
 	for row in data[1:]:
-		if row[0].month == currentTime.month and row[0].day == currentTime.day:
+		if row[0].month == mostRecentTime.month and row[0].day == mostRecentTime.day:
 			currentDay.append(row)
 
 	highTemp = currentDay[0][2]
@@ -67,6 +67,28 @@ def daylightSavings(zonename):
 	tz = pytz.timezone(zonename)
 	now = pytz.utc.localize(datetime.datetime.utcnow())
 	return now.astimezone(tz).dst() != datetime.timedelta(0)
+
+#checks more than an hour has passed since the data 
+#was last updated 
+#returns true if it has, false if not
+#input: mostRecentTime = dateTime
+#output: moreThanAnHour = boolean
+def updatedLastHour(mostRecentTime)
+	#Convert mostRecentTime from UTC to central time
+	now = utcToLocal(datetime.datetime.now())
+
+	#Use the following code for local hosting/error checking because
+	#otherwise 5/6 hours will be subtracted from the current time on the computer 
+	#and the fuction will always return false
+	#now = datetime.datetime.now()
+	delta = now - mostRecentTime
+
+	#Check if more than an hour has passed
+	if (delta.seconds / 60) > 60:
+		moreThanAnHour = True
+	else:
+		moreThanAnHour = False
+	return moreThanAnHour
 
 # get data from CSV file at URL and insert into table (2d list)
 # then processes the data added to table (covert text to necessary formats)
@@ -123,56 +145,50 @@ def getData(url):
 # input: data = 2d list
 # output: 9-tuple
 def tempInv(data):
-	#Get current data
-	currentTime = data[-1][0]
-	currentTemp = float(data[-1][2])
-	currentWindSpeed = float(data[-1][3])
+	#Get most recent data
+	mostRecentTime = data[-1][0]
+	mostRecentTemp = float(data[-1][2])
+	mostRecentWindSpeed = float(data[-1][3])
 
-	#Check if the data has been updated in the past hour
-	#If not set moreThanAnHour to False
-	now = utcToLocal(datetime.datetime.now())
-	delta = now - currentTime
-	#Check if more than an hour has passed
-	if (delta.seconds / 60) > 60:
-		moreThanAnHour = True
-	else:
-		moreThanAnHour = False
+	
+	#check if the data has been updated recently
+	moreThanAnHour = updatedLastHour(mostRecentTime)
 
 	#Get high and low temp
-	lowTemp = getLowTemp(currentTime, data)
-	highTemp = getHighTemp(currentTime, data)
+	lowTemp = getLowTemp(mostRecentTime, data)
+	highTemp = getHighTemp(mostRecentTime, data)
 
 	#Determine if there is an inversion
-	if currentTime.time() < datetime.time(12):  	
-		if currentTemp - lowTemp[0] > 3:
+	if mostRecentTime.time() < datetime.time(12):  	
+		if mostRecentTemp - lowTemp[0] > 3:
 			# no inversion and spray OK
-			return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+			return (False, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 		else:
-			if (currentTemp - lowTemp[0]) < 2:
+			if (mostRecentTemp - lowTemp[0]) < 2:
 				# strong inversion and no spray suggested
-				return (True, currentTemp, str(currentTime)[11:1919], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+				return (True, mostRecentTemp, str(mostRecentTime)[11:1919], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 			else:
-				if (currentTemp - lowTemp[0]) < 2 and currentWindSpeed > 4:
+				if (mostRecentTemp - lowTemp[0]) < 2 and mostRecentWindSpeed > 4:
 					# no inversion and spray OK
-					return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+					return (False, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 				else:
 					# strong inversion and no spray suggested
-					return (True, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+					return (True, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 	else:
-		if abs(currentTemp - highTemp[0]) <= 5:
+		if abs(mostRecentTemp - highTemp[0]) <= 5:
 			# no inversion and spray OK
-			return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+			return (False, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 		else:
-			if (currentTemp - highTemp[0]) >= 7:
+			if (mostRecentTemp - highTemp[0]) >= 7:
 				# strong inversion and no spray suggested
-				return (True, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+				return (True, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 			else:
-				if (currentTemp - highTemp[0]) >= 7 and currentWindSpeed > 4:
+				if (mostRecentTemp - highTemp[0]) >= 7 and mostRecentWindSpeed > 4:
 					# no inversion and spray OK
-					return (False, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+					return (False, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 				else:
 					# strong inversion and no spray suggested
-					return (True, currentTemp, str(currentTime)[11:19], currentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+					return (True, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 
 # prints the data in a readible format for error checking
 # input: data = 2d list
@@ -214,9 +230,8 @@ def main():
 		data = getData(url)
 		results.append(tempInv(data))
 
-	#Print results for debugging
-	#printResults(results)
-
+		for row in results:
+			print(row)
 	#return 2d list with info for webpage
 	return results
 
