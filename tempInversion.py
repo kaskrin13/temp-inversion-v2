@@ -206,7 +206,7 @@ def printResult(result):
 # output: results = 2d list
 def main():
 	#List of URLs with data, each URL represents one station
-	urls = ["https://thingspeak.com/channels/211013/feed.csv"]
+	urls = ["https://thingspeak.com/channels/211013/feed.csv", "https://thingspeak.com/channels/282031"]
 	results = []
 
 	#Calculate results based on number of URLs
