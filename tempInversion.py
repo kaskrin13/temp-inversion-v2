@@ -73,7 +73,7 @@ def daylightSavings(zonename):
 #returns true if it has, false if not
 #input: mostRecentTime = dateTime
 #output: moreThanAnHour = boolean
-def updatedLastHour(mostRecentTime)
+def updatedLastHour(mostRecentTime):
 	#Convert mostRecentTime from UTC to central time
 	now = utcToLocal(datetime.datetime.now())
 
