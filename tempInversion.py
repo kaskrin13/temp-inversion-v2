@@ -166,7 +166,7 @@ def tempInv(data):
 		else:
 			if (mostRecentTemp - lowTemp[0]) < 2:
 				# strong inversion and no spray suggested
-				return (True, mostRecentTemp, str(mostRecentTime)[11:1919], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
+				return (True, mostRecentTemp, str(mostRecentTime)[11:19], mostRecentWindSpeed, lowTemp[0], str(lowTemp[1])[11:19], highTemp[0], str(highTemp[1])[11:19], moreThanAnHour)
 			else:
 				if (mostRecentTemp - lowTemp[0]) < 2 and mostRecentWindSpeed > 4:
 					# no inversion and spray OK
