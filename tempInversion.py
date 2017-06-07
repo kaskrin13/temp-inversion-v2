@@ -80,7 +80,7 @@ def updatedLastHour(mostRecentTime):
 	#Use the following code for local hosting/error checking because
 	#otherwise 5/6 hours will be subtracted from the current time on the computer 
 	#and the fuction will always return false
-	#now = datetime.datetime.now()
+	#now = pytz.utc.localize(datetime.datetime.utcnow())
 	delta = now - mostRecentTime
 
 	#Check if more than an hour has passed
@@ -95,8 +95,6 @@ def updatedLastHour(mostRecentTime):
 # input: url = string
 # output: data = 2d list
 def getData(url):
-	#url = "https://thingspeak.com/channels/211013/feed.csv"
-
 	#Opens a CSV file at url and adds data to 2d list
 	dataStream = urllib.request.urlopen(url)
 	csvFile = csv.reader(codecs.iterdecode(dataStream, 'utf-8'))
@@ -159,6 +157,7 @@ def tempInv(data):
 	highTemp = getHighTemp(mostRecentTime, data)
 
 	#Determine if there is an inversion
+	#Check if before noon
 	if mostRecentTime.time() < datetime.time(12):  	
 		if mostRecentTemp - lowTemp[0] > 3:
 			# no inversion and spray OK
@@ -230,8 +229,10 @@ def main():
 		data = getData(url)
 		results.append(tempInv(data))
 
-		for row in results:
-			print(row)
+	#Print results for error checking
+	#for row in results:
+	#	print(row)
+
 	#return 2d list with info for webpage
 	return results
 
