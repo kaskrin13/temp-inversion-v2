@@ -68,9 +68,9 @@ def daylightSavings(zonename):
 	now = pytz.utc.localize(datetime.datetime.utcnow())
 	return now.astimezone(tz).dst() != datetime.timedelta(0)
 
-#checks more than an hour has passed since the data 
-#was last updated 
+#checks more than an hour has passed since the data was last updated 
 #returns true if it has, false if not
+#assumes the server is running on UTC time
 #input: mostRecentTime = dateTime
 #output: moreThanAnHour = boolean
 def updatedLastHour(mostRecentTime):
