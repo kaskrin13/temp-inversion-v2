@@ -1,5 +1,5 @@
 # David Fisher
-# 5/31/2017
+# 6/15/2017
 
 import urllib.request
 import codecs
@@ -104,6 +104,17 @@ def getData(url):
 
 	#Remove last two rows, which are empty
 	data = data[:-2]
+	
+	#Remove blank entries from data
+	for index, row in enumerate(data):
+                if (row[2] == "" or row[3] == "" or row[4] == "" or row[5] == ""):
+                        data.pop(index)
+			
+	#Rename first row to labels
+	data[0][2] = 'Air Temp'
+	data[0][3] = 'Wind Speed'
+	data[0][4] = 'Lux'
+	data[0][5] = 'Batt Volt'
 
 	#Converts the timestamps from text to datetime objects
 	dates = []
@@ -129,12 +140,6 @@ def getData(url):
 	#Convert windspeed text to float
 	for i in range(1, len(data), 1):
 		data[i][3] = float(data[i][3])
-
-	#Rename first row to labels
-	data[0][2] = 'Air Temp'
-	data[0][3] = 'Wind Speed'
-	data[0][4] = 'Lux'
-	data[0][5] = 'Batt Volt'
 
 	return data
 
