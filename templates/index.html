@@ -15,15 +15,19 @@
             <div class="header">
                 <div class="title">
                     <h1 align="center">
-                        Daily Determination of Atmospheric Stability for Aerial Applicators in the Mississippi Delta
+                        Daily Determination of Atmospheric Stability for Aerial Applicators in Stoneville, Mississippi
                     </h1>
                 </div>
             </div>
 
             <div class="main">
-                This page shows the weather data observed and measured every 15 minutes at a local weather station. 
-                Green marks indicate a low potential for temperature inversion in these locations and aerial application is recommended at the time with green mark. 
-                Otherwise, the temperatures are marked in red, which indicates that the potential for temperature inversion is high and aerial application is not recommended in those locations at the time with red mark. 
+                This page shows the weather data observed and measured every 15 minutes daily up to the
+                current time at each weather station for different locations in the Mississippi Delta. The second
+                column are the temperatures measured at the stations. The green marks indicate a low potential
+                for temperature inversion in these locations based on our background calculation and aerial
+                application is recommended at the time or so. Otherwise, the temperatures are marked in red,
+                which indicates that the potential for temperature inversion is high based on our background
+                calculation and aerial application is not recommended in those locations at the time or so. 
                 <p>Click <a href="#map">here</a> to go to the map.</p>
                 <p>For the latest observations and recommendation, please refresh your browser.</p>
 
@@ -153,13 +157,13 @@
                         <thead>
                             <tr>
                                 <th>Station</th>
-                                <th>Most Recent Temp  (&#176;F)</th>
-                                <th>Most Recent Time</th>
+                                <th>Temperature (&#176;F)</th>
                                 <th>Wind Speed (MPH)</th>
-                                <th>Low Temp  (&#176;F)</th>
-                                <th>Time Of Low</th>
-                                <th>High Temp  (&#176;F)</th>
-                                <th>Time Of High</th>
+                                <th>Time</th>
+                                <th>Low Temperature (&#176;F)</th>
+                                <th>Time Of Low Temperature</th>
+                                <th>High Temperature (&#176;F)</th>
+                                <th>Time Of High Temperature</th>
                             </tr>
                         </thead>
                         <!-- Flask template for table rows -->
@@ -169,16 +173,16 @@
                                 <td class="header" data-title="ARS Station">ARS Station {{ loop.index }}</td>
                                 {% if result[8] == False %}
                                     {% if result[0] == True %}
-                                        <td data-title="Most Recent Temp" style="background-color:Crimson;">{{ result[1] }}</td>
+                                        <td data-title="Temperature" style="background-color:Crimson;">{{ result[1] }}</td>
                                     {% else %}
-                                        <td data-title="Most Recent Temp" style="background-color:LightGreen;">{{ result[1] }}</td>
+                                        <td data-title="Temperature" style="background-color:LightGreen;">{{ result[1] }}</td>
                                     {% endif %}
-                                    <td data-title="Most Recent Time">{{ result[2] }}</td>
                                     <td data-title="Wind Speed (MPH)">{{ result[3] }}</td>
-                                    <td data-title="Low Temp  (°F)">{{ result[4] }}</td>
-                                    <td data-title="Time of Low">{{ result[5] }}</td>
-                                    <td data-title="High Temp (°F)">{{ result[6] }}</td>
-                                    <td data-title="Time of High">{{ result[7] }}</td>
+                                    <td data-title="Time">{{ result[2] }}</td>                                   
+                                    <td data-title="Low Temperature (°F)">{{ result[4] }}</td>
+                                    <td data-title="Time of Low Temperature">{{ result[5] }}</td>
+                                    <td data-title="High Temperature (°F)">{{ result[6] }}</td>
+                                    <td data-title="Time of High Temperature">{{ result[7] }}</td>
                                 {% else %}
                                     <td colspan="7" style="background-color:red;">The station is temporarily not working, and will be back up shortly</td>
                                 {% endif %}
@@ -223,19 +227,41 @@
                     long: -90.876221
                 };
 
-                <!-- Test Code for a second location -->
-                <!--var building1 = {-->
-                <!--    info: '<strong>ARS Building 1</strong>\-->
-                <!--                <br> Stoneville, MS 38776<br>',-->
-                <!--    lat: 33.425078,-->
-                <!--    long: -90.910829-->
-                <!--};-->
+                var station2 = {
+                    info: '<strong>Station 2</strong>\
+                                <br> Stoneville, MS 38776<br>',
+                    lat: 33.447560,
+                    long: -90.876221
+                };
+                
+                var station3 = {
+                    info: '<strong>Station 3</strong>\
+                                <br> Stoneville, MS 38776<br>',
+                    lat: 33.447560,
+                    long: -90.876221
+                };
+                
+                var station4 = {
+                    info: '<strong>Station 4</strong>\
+                                <br> Stoneville, MS 38776<br>',
+                    lat: 33.447560,
+                    long: -90.876221
+                };
+                
+                var station5 = {
+                    info: '<strong>Station 5</strong>\
+                                <br> Stoneville, MS 38776<br>',
+                    lat: 33.447560,
+                    long: -90.876221
+                };
 
                 <!-- and here -->
                 var locations = [
                     [station1.info, station1.lat, station1.long, 0]
-                    <!-- Test Code for a second location -->
-                    <!--,[building1.info, building1.lat, building1.long, 1]-->
+                    [station2.info, station2.lat, station2.long, 1]
+                    [station3.info, station3.lat, station3.long, 2]
+                    [station4.info, station4.lat, station4.long, 3]
+                    [station5.info, station5.lat, station5.long, 4]
                 ];
 
                 var map = new google.maps.Map(document.getElementById('map'), {
