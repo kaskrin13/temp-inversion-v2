@@ -66,89 +66,42 @@
                     html,
                     body,
                         table { 
+                            table-layout: fixed;
                             width: 100%;
-                            margin-left:auto
-                            margin-right:auto
+                            margin:auto;
                             border-collapse: collapse; 
                             cellspacing="0";
                             cellpadding="10";
-                            id="MainContent_GridView1";
-                            align="center";
+                            align="left";
                             style="color:#333333;
                         }
-
+                        h1 {
+                            font-size: 200%;
+                        }
                         /* Row formatting */
                         td { 
                             padding: 6px; 
-                            text-align: center; 
+                            text-align: left; 
                             color:#333333;
+                            border-right: 1px solid white;
                         }
-
                         /* Alternate colors for rows */
-                        td:nth-child(even) { background-color: #D2DEEF; }
-                        td:nth-child(odd) { background-color: #EAEFF7; }
-
+                        tr:nth-child(even) { background-color: #D2DEEF; }
+                        tr:nth-child(odd) { background-color: #EAEFF7; }
                         /* Header row formatting */
                         th { 
                             padding: 6px; 
-                            text-align: center; 
+                            text-align: left; 
                             background-color:#5B9BD5;
                             font-weight: bold; 
                             color: white;
                         }
                         .footer { 
-                            width: 100%;
-                            position: absolute; // stick me to the bottom.
+                            width: 80%;
+                            position: absolute;
                             bottom: 0;
-                            height: 50px;
+                            height: 100px;
                         }
-                </style>
-
-                <!-- Table Mobile CSS -->
-                <style>
-                    @media 
-                    only screen and (max-width: 760px),
-                    (min-device-width: 768px) and (max-device-width: 1024px)  {
-                        /* Force table to not be like tables anymore */
-                        table, thead, tbody, th, td, tr {
-                            display: block;
-                        }
-
-                        /* Hide table headers (but not display: none;, for accessibility) */
-                        thead tr { 
-                            position: absolute;
-                            top: -9999px;
-                            left: -9999px;
-                        }
-
-                        /* Row formatting */
-                        td {
-                            /* Behave  like a "row" */
-                            border: 1px solid #fff;
-                            position: relative;
-                            padding-left: 50%;
-                            background-color: #D2DEEF;
-                        }
-
-                        /* Labels for mobile */
-                        td:before {
-                            /* Now like a table header */
-                            position: absolute;
-                            content: attr(data-title);
-                            /* Top/left values mimic padding */
-                            top: 0px;
-                            left: 0px;
-                            bottom: 0px;
-                            width: 50%;
-                            padding-right: 0px;
-                            background-color: #5B9BD5;
-                            font-weight: bold;
-                            color: white;
-                        }
-
-                        /* Add gap between stations */
-                        tr { padding-bottom: 10px; }
-                    }
                 </style>
 
                 <!-- Table code --> 
