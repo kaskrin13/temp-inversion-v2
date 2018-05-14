@@ -224,10 +224,13 @@ def printResult(result):
 # output: results = 2d list
 def main():
     #List of URLs with data, each URL represents one station
-    urls = ["https://thingspeak.com/channels/211013/feed.csv", "https://thingspeak.com/channels/282031/feed.csv", "https://thingspeak.com/channels/216976/feed.csv",
-            "https://thingspeak.com/channels/287811/feed.csv", "https://thingspeak.com/channels/288782/feed.csv"]
+    urls = ["https://thingspeak.com/channels/211013/feed.csv", "https://thingspeak.com/channels/282031/feed.csv", 
+            "https://thingspeak.com/channels/287811/feed.csv"]
     results = []
 
+# site 4 is down: "https://thingspeak.com/channels/216976/feed.csv"
+# site 5 is down: "https://thingspeak.com/channels/288782/feed.csv"
+    
     #Calculate results based on number of URLs
     for url in urls:
         data = getData(url)
