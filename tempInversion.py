@@ -102,7 +102,7 @@ def getData(url):
         data.append(line)
 
     #Remove last two rows, which are empty
-    data = data[:-2]
+    #data = data[:-2]
 
     #Remove blank entries from data
     for index, row in enumerate(data):
