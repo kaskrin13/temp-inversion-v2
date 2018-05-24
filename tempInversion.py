@@ -225,7 +225,7 @@ def printResult(result):
 def main():
     #List of URLs with data, each URL represents one station
     urls = ["https://thingspeak.com/channels/211013/feed.csv", "https://thingspeak.com/channels/282031/feed.csv", 
-            "https://thingspeak.com/channels/287811/feed.csv", "https://thingspeak.com/channels/216976/feed.csv", "https://thingspeak.com/channels/288782/feed.csv"]
+            "https://thingspeak.com/channels/287811/feed.csv"]
     results = []
 
 # site 4 is down: "https://thingspeak.com/channels/216976/feed.csv"
