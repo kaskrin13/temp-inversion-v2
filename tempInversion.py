@@ -83,7 +83,7 @@ def updatedLastHour(mostRecentTime):
     delta = now - mostRecentTime
 
     #Check if more than an hour has passed
-    if (delta.seconds / 60) > 60:
+    if (delta.seconds / 60) > 75:
         moreThanAnHour = True
     else:
         moreThanAnHour = False
